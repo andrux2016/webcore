@@ -1,0 +1,23 @@
+	## EXPIRES CACHING ##
+	# Le serveur doit suivre les liens symboliques :
+	Options +FollowSymlinks
+	RewriteEngine On
+	RewriteBase /webcore
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	
+	# Page :
+	#RewriteRule ^page/inscription/([^/\.]+)/?$ index.php?filename=$1 [L,QSA]
+	RewriteRule ^images/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^js/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^jquery/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^css/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^pdf/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^documents/(.*)$ rewriting.php?filename=$1 [L,QSA]
+	RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)/?(.*)$ index.php?controllers=$1&action=$2 [QSA,NC,L]
+	RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)/$ index.php?controllers=$1&action=$2 [QSA,NC,L]
+	RewriteRule ^([a-zA-Z]+)/$ index.php?controllers=$1 [QSA,NC,L]
+
+	# Dossier :
+	#RewriteRule images/(.*)  themes/test/img/$1 [L]
