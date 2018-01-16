@@ -10,7 +10,7 @@
  * create 2018 by  mandalorien
  */
  
-class Core extends DatabaseConnection{
+class Core{
 	
 	private $_SQLPointer;
 	private $_UrlPath;
@@ -111,8 +111,9 @@ class Core extends DatabaseConnection{
 				break;
 			}
 		}
-		parent::__construct(HOST,USER,PASS,BASE);
-		$this->_SQLPointer	= parent::Connexion();
+		
+		$this->_SQLPointer = new MYSQL_PDO(HOST,USER,PASS,BASE); # if MYSQL connexion 
+		// $this->_SQLPointer = new MSSQL_PDO(HOST,USER,PASS,BASE); # if SQL SERVER connexion
 	}
 	
 	protected function urlPath(){
@@ -122,8 +123,7 @@ class Core extends DatabaseConnection{
 	protected function SQLPointer(){
 		return $this->_SQLPointer;
 	}
-	
-	//method : modules
-	
+
+	//method : modules	
 }
 ?>

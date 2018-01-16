@@ -15,6 +15,8 @@ require_once('constant.php'); # les constants obligatoires
 
 # class obligatoire
 include(INCLUDE_PATH.'classes/core/class.pdo_connect.php');
+include(INCLUDE_PATH.'classes/core/connexion/class.mssql.php');
+include(INCLUDE_PATH.'classes/core/connexion/class.mysql.php');
 include(INCLUDE_PATH.'classes/core/class.core.php');
 
 # class dependante de la connexion

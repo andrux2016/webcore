@@ -9,90 +9,140 @@
  *
  * create 2018 by  mandalorien
  */
-
-class DatabaseConnection
+abstract class Pdo_request
 {
-	private $_host;
-	private $_user;
-	private $_password;
-	private $_database;
+	private $_Server;
+	private $_SQLPointer;
+	private $_Ressource;
+	
 	private $_countquery;
 	private $_vuequery;
 	private $_timexecutequery;
-
-	Public function __construct($host,$user,$password,$database)
-	{
-		$this->_host = $host;
-		$this->_user = $user;
-		$this->_password = $password;
-		$this->_database = $database;
-		$this->_vuequery = array();
-		$this->_timexecutequery = array();
-	}
-
-	public function Get_Database(){
-		return $this->_database;
+	
+	protected function processing($SQLPointer,$Server){
+		$this->_SQLPointer = $SQLPointer;
+		$this->_Server = $Server;
 	}
 	
 	// nombre de requetes executées
-	public function Update_Countquery(){
+	protected function Update_Countquery(){
 		$this->_countquery = $this->_countquery + 1;
 	}
 	
 	// visualisation des requetes executées
-	public function Update_Vuequery($sql){
+	protected function Update_Vuequery($sql){
 		array_push($this->_vuequery,$sql);
 	}
 	
 	// temps d'execution des requetes executées
-	public function Update_Timexecutequery($time_start){
+	protected function Update_Timexecutequery($time_start){
 		$time_end = microtime(true);
 		$microtime = $time_end - $time_start;
 		array_push($this->_timexecutequery,$microtime);
 	}
 	
-	public function Get_Countquery(){
+	protected function Get_Countquery(){
 		return $this->_countquery;
 	}
 	
-	public function Get_Vuequery(){
+	protected function Get_Vuequery(){
 		return $this->_vuequery;
 	}
 	
-	public function Get_Timexecutequery(){
+	protected function Get_Timexecutequery(){
 		return $this->_timexecutequery;
 	}
 	
-	public function Connexion(){
-		try
-		{
-			$db = new PDO("mysql:host={$this->_host};dbname={$this->_database}","{$this->_user}","{$this->_password}");
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->exec('SET NAMES UTF8');
+	protected function Query($type = 'fetch',$Query = null, $Params = null, $Ressource = null){
+		
+		$Return = false;
+		switch($this->_Server){
+			case 'MYSQL_PDO':
+					$this->_Ressource = $this->_SQLPointer->prepare($Query);
+
+					try {
+						if($Params != null) {
+							$Return = $this->_Ressource->execute($Params);
+						}
+						else {
+							$Return = $this->_Ressource->execute();
+						}
+					}
+					catch(Exception $Error) {
+						error_log($Error->getMessage()." | ".$Error->getCode());
+					}
+				break;
+			case 'MSSQL_PDO':
+				$Ressource	= ($Ressource == null) ? 'Ressource[0]':$Ressource;
+
+				if($Query != null){
+					if(($Params != null) && (is_array($Params) === false)) {
+						$Params = array($Params);
+					}
+						
+					$this->_Ressource = $this->_SQLPointer->prepare($Query);
+					
+					try {
+						if($Params != null) {
+							$Return = $this->_Ressource->execute($Params);
+						}
+						else {
+							$Return = $this->_Ressource->execute();
+						}
+					}
+					catch(Exception $Error) {
+						error_log($Error->getMessage()." | ".$Error->getCode());
+					}
+					
+					if($Return === false) {
+						$ErrorMessage = $this->_Ressource->errorInfo();
+						error_log('MSSQL ERROR : '.$ErrorMessage[2].' | '.$this->ShowQuery($Query, $Params));
+					}
+				}
+				break;
 		}
-		catch (PDOException $e)
-		{
-			return false;
+		
+		
+		switch($type){
+			case 'fetch':
+				$result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
+			break;
+			case 'fetchObject':
+				$result = $this->_Ressource->fetchObject();
+				break;
+			case 'fetchAll':
+				$result = $this->_Ressource->fetchAll();
+				break;
 		}
-		return $db;
+		
+		return $result;
 	}
-	
-	public function Message(){
-		try
-		{
-			$db = new PDO("mysql:host={$this->_host};dbname={$this->_database}","{$this->_user}","{$this->_password}");
-			$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$db->exec('SET NAMES UTF8');
+		
+	protected function showQuery($Query, $Params){
+		$Champs = array();
+		$Valeurs = array();
+		
+		foreach($Params as $Champ => $Valeur) {
+			if (is_string($Champ)) {
+				$Champs[] = '/:'.$Champ.'/';
+			}
+			else {
+				$Champs[] = '/[?]/';
+			}
+
+			$Valeurs[] = '\''.$Valeur .'\'';
 		}
-		catch (PDOException $e)
-		{
-			return utf8_encode("<code>Error code : {$e->getCode()}" . PHP_EOL . " Error message : {$e->getMessage()}" . PHP_EOL . "</code><br />");
-		}
+	   
+		$Query = preg_replace($Champs, $Valeurs, $Query, 1, $Count);
+		return $Query;
 	}
-	
-	Public function Close($db)
-	{
-		$db = null;
+		
+	protected function beginTransaction() {
+		return $this->_SQLPointer->beginTransaction();
+	}
+		
+	protected function commit() {
+		return $this->_SQLPointer->commit();
 	}
 }
 ?>

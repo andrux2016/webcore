@@ -40,11 +40,13 @@ class Controllers extends Core{
 	}
 	
 	public function SQLPointer(){
+		var_dump($this->_SQLPointer);
 		return $this->_SQLPointer;
 	}
 	
-	public function set_Page($var){
+	public function set_Page($var,$var2){
 		$this->_Page = $var;
+		$this->_TimeCache = $var2;
 	}
 	
 	public function actions($nameClass,$nameMethod,$param = null){
