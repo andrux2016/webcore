@@ -105,21 +105,21 @@ class Controllers extends Core{
 	
 	# force la class fille à le définir
 	protected function loadPage($nameClass){
-		if(Cache::exist_cache($nameClass."header") && Cache::exist_cache($nameClass."footer") && Cache::exist_cache($nameClass . $nameClass)){
-			Cache::read_cache($nameClass."header"). PHP_EOL;
+		if(Cache::exist_cache($nameClass."header". parent::get_SessionIDCache()) && Cache::exist_cache($nameClass."footer". parent::get_SessionIDCache()) && Cache::exist_cache($nameClass . $nameClass. parent::get_SessionIDCache())){
+			Cache::read_cache($nameClass."header". parent::get_SessionIDCache()). PHP_EOL;
 			
 			if(!is_null($this->_TimeCache)){
-				Cache::read_cache($nameClass . $nameClass). PHP_EOL;
-				Cache::delete_cache($nameClass . $nameClass ,$this->_TimeCache);
+				Cache::read_cache($nameClass . $nameClass. parent::get_SessionIDCache()). PHP_EOL;
+				Cache::delete_cache($nameClass . $nameClass. parent::get_SessionIDCache() ,$this->_TimeCache);
 			}else{
 				echo $this->_Page . PHP_EOL;
 			}
 			
-			Cache::read_cache($nameClass."footer"). PHP_EOL;
+			Cache::read_cache($nameClass."footer". parent::get_SessionIDCache()). PHP_EOL;
 			
 			# il supprime automatiquement au bout de x temps : configuration dans la class cache
-			Cache::delete_cache($nameClass."header");
-			Cache::delete_cache($nameClass."footer");
+			Cache::delete_cache($nameClass."header". parent::get_SessionIDCache());
+			Cache::delete_cache($nameClass."footer". parent::get_SessionIDCache());
 		}else{
 			$loader = null;
 			foreach($this->_FilesLoadThemeCss as $files){
@@ -127,10 +127,10 @@ class Controllers extends Core{
 			}
 			$this->_Parse['style'] = $loader;
 			echo $this->_Template->displaytemplate('header',$this->_Parse).PHP_EOL;
-			Cache::create_cache($nameClass."header",$this->_Template->displaytemplate('header',$this->_Parse));
+			Cache::create_cache($nameClass."header". parent::get_SessionIDCache(),$this->_Template->displaytemplate('header',$this->_Parse));
 			echo $this->_Page . PHP_EOL;
 			if(!is_null($this->_TimeCache)){
-				Cache::create_cache($nameClass. $nameClass,$this->_Page);
+				Cache::create_cache($nameClass. $nameClass. parent::get_SessionIDCache(),$this->_Page);
 			}
 			$loader = null;
 			foreach($this->_FilesLoadThemeJs as $files){
@@ -138,7 +138,7 @@ class Controllers extends Core{
 			}
 			$this->_Parse['js'] = $loader;
 			echo $this->_Template->displaytemplate('footer',$this->_Parse).PHP_EOL;
-			Cache::create_cache($nameClass."footer",$this->_Template->displaytemplate('footer',$this->_Parse));
+			Cache::create_cache($nameClass."footer". parent::get_SessionIDCache(),$this->_Template->displaytemplate('footer',$this->_Parse));
 		}
 	}
 	
