@@ -71,7 +71,7 @@ abstract class Pdo_request
 					$this->_Ressource = $this->_SQLPointer->prepare($Query);
 
 					try {
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->beginTransaction();
 						}
 						
@@ -82,13 +82,13 @@ abstract class Pdo_request
 							$Return = $this->_Ressource->execute();
 						}
 						
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->commit();
 							$Result = true;
 						}
 					}
 					catch(Exception $Error) {
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->rollBack();
 							$Result = false;
 						}
@@ -138,7 +138,7 @@ abstract class Pdo_request
 				break;
 		}
 		
-		if(!preg_match("/insert/i",$Query) && !preg_match("/update/i",$Query) && !preg_match("/delete/i",$Query)) {
+		if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 			switch($type){
 				case 'fetch':
 					$Result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
