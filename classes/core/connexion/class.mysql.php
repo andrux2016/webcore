@@ -39,13 +39,14 @@ class MYSQL_PDO extends Pdo_request{
 		}
 
 		parent::processing($this->_SQLPointer,get_class($this));
-		
-		return $this->_SQLPointer;
 	}
 	
-	public function Query($type = null,$Query = null, $Params = null, $Ressource = null){return parent::Query($type,$Query,$Params,$Ressource);}
+	public function open(){return parent::open();}
+	public function close(){parent::close();}
+	public function query($type = null,$Query = null, $Params = null, $Ressource = null){return parent::query($type,$Query,$Params,$Ressource);}
 	public function showQuery($Query, $Params){return parent::Query($Query,$Params);}
 	public function beginTransaction(){return parent::beginTransaction();}
 	public function commit(){return parent::commit();}
+	public function rollBack(){return parent::rollBack();}
 }
 ?>

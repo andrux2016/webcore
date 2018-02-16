@@ -18,6 +18,7 @@ abstract class Pdo_request
 	private $_countquery;
 	private $_vuequery;
 	private $_timexecutequery;
+	protected $_transactionCounter = 0; 
 	
 	protected function processing($SQLPointer,$Server){
 		$this->_SQLPointer = $SQLPointer;
@@ -53,22 +54,44 @@ abstract class Pdo_request
 		return $this->_timexecutequery;
 	}
 	
-	protected function Query($type = 'fetch',$Query = null, $Params = null, $Ressource = null){
+	protected function open(){
+		return $this->_SQLPointer;
+	}
+	
+	protected function close(){
+		$this->_SQLPointer = null;
+	}
+	
+	protected function query($type = 'fetch',$Query = null, $Params = null, $Ressource = null){
 		
 		$Return = false;
+		$Result = null;
 		switch($this->_Server){
 			case 'MYSQL_PDO':
 					$this->_Ressource = $this->_SQLPointer->prepare($Query);
 
 					try {
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->beginTransaction();
+						}
+						
 						if($Params != null) {
 							$Return = $this->_Ressource->execute($Params);
 						}
 						else {
 							$Return = $this->_Ressource->execute();
 						}
+						
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->commit();
+							$Result = true;
+						}
 					}
 					catch(Exception $Error) {
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->rollBack();
+							$Result = false;
+						}
 						error_log($Error->getMessage()." | ".$Error->getCode());
 					}
 				break;
@@ -83,14 +106,27 @@ abstract class Pdo_request
 					$this->_Ressource = $this->_SQLPointer->prepare($Query);
 					
 					try {
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->beginTransaction();
+						}
+						
 						if($Params != null) {
 							$Return = $this->_Ressource->execute($Params);
 						}
 						else {
 							$Return = $this->_Ressource->execute();
 						}
+						
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->commit();
+							$Result = true;
+						}
 					}
 					catch(Exception $Error) {
+						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+							$this->rollBack();
+							$Result = false;
+						}
 						error_log($Error->getMessage()." | ".$Error->getCode());
 					}
 					
@@ -102,20 +138,21 @@ abstract class Pdo_request
 				break;
 		}
 		
-		
-		switch($type){
-			case 'fetch':
-				$result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
-			break;
-			case 'fetchObject':
-				$result = $this->_Ressource->fetchObject();
+		if(!preg_match("/insert/i",$Query) && !preg_match("/update/i",$Query) && !preg_match("/delete/i",$Query)) {
+			switch($type){
+				case 'fetch':
+					$Result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
 				break;
-			case 'fetchAll':
-				$result = $this->_Ressource->fetchAll();
-				break;
+				case 'fetchObject':
+					$Result = $this->_Ressource->fetchObject();
+					break;
+				case 'fetchAll':
+					$Result = $this->_Ressource->fetchAll(PDO::FETCH_OBJ);
+					break;
+			}
 		}
-		
-		return $result;
+	
+		return $Result;
 	}
 		
 	protected function showQuery($Query, $Params){
@@ -138,11 +175,25 @@ abstract class Pdo_request
 	}
 		
 	protected function beginTransaction() {
-		return $this->_SQLPointer->beginTransaction();
+        if(!$this->_transactionCounter++)
+             $this->_SQLPointer->beginTransaction();
+       return $this->_transactionCounter >= 0; 
 	}
 		
 	protected function commit() {
-		return $this->_SQLPointer->commit();
+       if(!--$this->_transactionCounter)
+           $this->_SQLPointer->commit();
+       return $this->_transactionCounter >= 0; 
+	}
+	
+	protected function rollBack() {
+        if($this->_transactionCounter >= 0)
+        {
+            $this->_transactionCounter = 0;
+            return  $this->_SQLPointer->rollback();
+        }
+        $this->_transactionCounter = 0;
+        return false; 
 	}
 }
 ?>
