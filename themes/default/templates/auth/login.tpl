@@ -1,16 +1,32 @@
-<p id="msg"></p>
-<section>
-	<article class="Connect">
-		<div class="Form">
-			<h3>Cloud-Partner</h3>
-			<form method="post" action="/index.php">
-					<input type="text" name="PHP_AUTH_SIRET" placeholder="{INPUT_SIRET}"  data-translate="INPUT_SIRET" autocomplete="off"/>
-					<input type="text" name="PHP_AUTH_USER" placeholder="{INPUT_USERNAME}" data-translate="INPUT_USERNAME"/>
-					<input type="password" name="PHP_AUTH_PW" placeholder="{INPUT_PASSWORD}" data-translate="INPUT_PASSWORD"/>
-					<button type="submit" name="bt_c" data-translate="BT_CONNECT">{BT_CONNECT}</button>	
-			</form>
-		</div>
-		
-		<!-- <aside><a href="/index.php?Type=forgotPassword">Mot de passe oublié ?</a></aside> -->
-	</article>
-</section>
+<!-- BLOC PRINCIPAL -->
+	<span id="message"></span>
+	<div class="col-lg-2"></div>
+	<div class="well bs-component col-lg-8">
+	<form class="form-horizontal">
+		<legend>Connexion</legend>
+			<div class="form-group">
+				<label for="inputEmail" class="col-lg-3 control-label" data-translate="LABEL_EMAIL">{LABEL_EMAIL}</label>
+				<div class="col-lg-9">
+					<input class="form-control" id="inputHost" placeholder="{LABEL_EMAIL}" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputPassword" class="col-lg-3 control-label" data-translate="LABEL_PASSWORD">{LABEL_PASSWORD}</label>
+				<div class="col-lg-9">
+					<input class="form-control" id="inputPassword" placeholder="{LABEL_PASSWORD}" type="password">
+				</div>
+			</div>
+			<div class="form-group">
+				<div id="canvasloader-container">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-lg-12">
+					<button id="connect_reset" type="reset" class="btn btn-default" data-translate="BUTTON_CANCEL">{BUTTON_CANCEL}</button>
+					<button id="connect_go" type="button" class="btn btn-success" data-translate="BUTTON_CONNECT">{BUTTON_CONNECT}</button>
+				</div>
+			</div>
+	</form>
+	</div>
+	<div class="col-lg-2"></div>
+<!-- FIN BLOC PRINCIPAL -->

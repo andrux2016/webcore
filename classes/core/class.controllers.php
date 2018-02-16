@@ -215,16 +215,11 @@ class Controllers extends Core{
 			
 			Cache::read_cache($nameClass."header" . parent::get_SessionIDCache());
 			######################################## CORP PAGE ##########################################
-			if(isset($_SESSION['Logged']) && $_SESSION['Logged'] == true){
-				echo Format::compile($this->sidebar());
-				echo Format::compile($this->_Template->displaytemplate('begin-page-content-wrapper',$this->_Parse));
-				echo Format::compile($this->topheader());
-				echo Format::compile($this->topmenu());
-			}
+			echo Format::compile($this->topheader());
+			echo Format::compile($this->topmenu());
+			echo Format::compile($this->_Template->displaytemplate('begin-page-content-wrapper',$this->_Parse));
 			echo Format::compile($this->_Page);
-			if(isset($_SESSION['Logged']) && $_SESSION['Logged'] == true){
-				echo Format::compile($this->_Template->displaytemplate('end-page-content-wrapper',$this->_Parse));
-			}
+			echo Format::compile($this->_Template->displaytemplate('end-page-content-wrapper',$this->_Parse));
 			######################################## CORP PAGE ##########################################
 			Cache::read_cache($nameClass."footer" . parent::get_SessionIDCache());
 			
@@ -243,16 +238,11 @@ class Controllers extends Core{
 				Cache::create_cache($nameClass."header" . parent::get_SessionIDCache(),$this->_Template->displaytemplate('header',$this->_Parse));
 			}
 			######################################## CORP PAGE ##########################################
-			if(isset($_SESSION['Logged']) && $_SESSION['Logged'] == true){
-				echo Format::compile($this->sidebar());
-				echo Format::compile($this->_Template->displaytemplate('begin-page-content-wrapper',$this->_Parse));
-				echo Format::compile($this->topheader());
-				echo Format::compile($this->topmenu());
-			}
+			echo Format::compile($this->topheader());
+			echo Format::compile($this->topmenu());
+			echo Format::compile($this->_Template->displaytemplate('begin-page-content-wrapper',$this->_Parse));
 			echo Format::compile($this->_Page);
-			if(isset($_SESSION['Logged']) && $_SESSION['Logged'] == true){
-				echo Format::compile($this->_Template->displaytemplate('end-page-content-wrapper',$this->_Parse));
-			}
+			echo Format::compile($this->_Template->displaytemplate('end-page-content-wrapper',$this->_Parse));
 			######################################## CORP PAGE ##########################################
 			$loader = null;
 			foreach($this->_FilesLoadThemeJs as $files){

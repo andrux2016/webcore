@@ -27,8 +27,7 @@ class Auth extends Controllers{
 		$this->_Template = new Template();
 		
 		# theme loading
-		parent::param("theme.min","css");
-		
+		parent::param("default","css");
 		
 		parent::param("jquery-3.2.1.min","jquery");
 		parent::param("bootstrap.min","jquery");

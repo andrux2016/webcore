@@ -5,12 +5,17 @@
 	<head>
 		<!-- Title de la page -->
 		<title data-translate="TITLE_{NamePage}">{title_translate_NamePage}</title>
-			<link rel="shortcut icon" href="{Link}/images/favicon.ico"/>
+			<link rel="shortcut icon" href="{Link}/images/favicon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-			<meta content="fr" http-equiv="Content-language"/>
+			<meta content="text/html; charset={META_ENCODAGE}" http-equiv="Content-Type" />
+			<meta content="{META_LANGAGE}" http-equiv="Content-language"/>
+			<meta content="{META_AUTHOR}" name="author"/>
+			<meta content="{META_COPYRIGHT}" name="copyright"/>
+			<meta content="{META_DESCRIPTION}" name="description"/>
+			<meta content="{META_KEYWORDS}" name="keywords"/>
+			<meta content="never" name="Expires"/>
+			<meta content="Tous public" name="rating"/>
+			<meta content="{META_SUBJECT}" name="subject"/>
 			{style}
 	</head>
 	<body>
-	<!-- Begin wrapper -->
-	<div id="wrapper" class="active">
