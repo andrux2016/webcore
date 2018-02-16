@@ -151,15 +151,13 @@ class Lang{
 		$_DATA = array();
 		$_DATA[] = strtolower($this->_lang);
 		
-		$_REQ = "SELECT * FROM Langs WHERE code = ?";
-		$this->_SQLPointer->Query($_REQ,$_DATA);
-		
-		$CL = $this->_SQLPointer->fetchObject();
+		$_REQ = "SELECT * FROM ". Entity_Langs::TABLE ." WHERE ". Entity_Langs::CODE ." = ?";
+		$CL = $this->_SQLPointer->query('fetchObject',$_REQ,$_DATA);
 		if(!is_null($CL)){
-			$this->_Id = $CL->id_lang;
-			$this->_Name = $CL->name;
-			$this->_Image = $CL->image;
-			$this->_Code = strtolower($CL->code);
+			$this->_Id = $CL->ID;
+			$this->_Name = $CL->Name;
+			$this->_Image = $CL->Image;
+			$this->_Code = strtolower($CL->Code);
 			return true;
 		}else{
 			error_log("il n'y a pas de resultat concernant la langue {$this->_lang}.");
@@ -170,17 +168,14 @@ class Lang{
 	private function list_Langs(){
 		
 		$_ARRAY = array();
-		$_REQ = "SELECT * FROM Langs";
-		$this->_SQLPointer->Query($_REQ);
-		$Lists = $this->_SQLPointer->fetchAll();
+		$_REQ = "SELECT * FROM ". Entity_Langs::TABLE;
+		$Lists = $this->_SQLPointer->query('fetchAll',$_REQ);
 		if(!is_null($Lists)){
-			foreach($Lists AS $lang){
-				$this->set_ListLang(strtolower($lang->code));
+			foreach($Lists AS $key=>$lang){
+				$this->set_ListLang(strtolower($lang->Code));
 			}
-			return true;
 		}else{
 			error_log("une erreur est survenu lors de l'utilisation de la methode : list_Langs - il n'y a aucunes langues existantes dans la BDD.");
-			return false;
 		}
 	}
 	
@@ -206,15 +201,13 @@ class Lang{
 				$methods = null;
 			}
 			
-			$_REQ = "SELECT * FROM Translations WHERE id_lang = ? ORDER BY name ASC";
+			$_REQ = "SELECT * FROM ". Entity_Translations::TABLE ." WHERE ". Entity_Translations::LANGID ." = ? ORDER BY ". Entity_Translations::NAME ." ASC";
 			$_DATA = array();
 			$_DATA[] = $this->_Id;
-			$this->_SQLPointer->Query($_REQ,$_DATA);
-			foreach($this->_SQLPointer->fetchAll() as $columns){
-				
+			foreach($this->_SQLPointer->query('fetchAll',$_REQ,$_DATA) as $columns){
 				// attributes
-				$ParseConst['name'] = strtoupper($columns->name);
-				$ParseConst['value'] = $columns->value;
+				$ParseConst['name'] = strtoupper($columns->Name);
+				$ParseConst['value'] = $columns->Value;
 				
 				$construct .= $templates->displaytemplate('models/attributes/constant',$ParseConst). PHP_EOL;
 			}
