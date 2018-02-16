@@ -30,7 +30,6 @@ include(INCLUDE_PATH.'classes/core/class.mailer.php');
 include(INCLUDE_PATH.'classes/core/class.controllers.php');
 include(INCLUDE_PATH.'classes/class.auth.php');
 include(INCLUDE_PATH.'classes/core/class.lang.php');
-include(INCLUDE_PATH.'classes/core/class.crypt.php');
 
 include(INCLUDE_PATH.'classes/core/class.flag.php');
 
