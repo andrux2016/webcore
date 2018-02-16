@@ -11,6 +11,7 @@
  */
 class Changelog extends Controllers{
 	
+	const ONLY_IN_GAME = false;
 	private $_Template;
 	private $_Message;
 	private $_Errors;

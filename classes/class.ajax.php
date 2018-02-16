@@ -11,6 +11,7 @@
  */
 class Ajax extends Controllers{
 	
+	const ONLY_IN_GAME = false;
 	private $_User;
 	private $_SQLPointer;
 	private $_Action;

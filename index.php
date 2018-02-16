@@ -16,7 +16,7 @@ $controllers = new Controllers();
 $controller = isset($_GET['controllers']) ? $_GET['controllers'] : 'init';
 $action = isset($_GET['action']) ? $_GET['action'] : 'error';
 $param = isset($_GET['param']) ? $_GET['param'] : null;
-	
+
 if(!isset($_SESSION['Logged'])  || $_SESSION['Logged'] == false){
 	$controllers->actions('auth','login',$param);
 }else{

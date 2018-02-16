@@ -61,7 +61,29 @@ class Auth extends Controllers{
 				Core::redirect(strtolower(get_class($this)),'login');
 			}
 		}else{
-			Core::redirect(strtolower(get_class($this)),'login');
+			$classe = ucfirst($_GET['controllers']);
+			if(!isset($_GET['action'])){
+				if(file_exists(INCLUDE_PATH . parent::CONTROLLER .'class.'.strtolower($classe).'.php')){
+					require_once(INCLUDE_PATH . parent::CONTROLLER . 'class.'. strtolower($classe).'.php');
+					if(class_exists($classe)){
+						if(!$classe::ONLY_IN_GAME){
+							$obj = new $classe; 
+							$rc = new ReflectionClass($classe);
+							$reflectionMethod = new ReflectionMethod($classe,"display");
+							parent::set_Page($reflectionMethod->invoke($obj));
+							die();
+						}else{
+							Core::redirect(strtolower(get_class($this)),'login');
+						}
+					}else{
+						Core::redirect(strtolower(get_class($this)),'login');
+					}
+				}else{
+					Core::redirect(strtolower(get_class($this)),'login');
+				}
+			}else{
+				Core::redirect(strtolower($classe));
+			}
 		}
 
 		
