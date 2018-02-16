@@ -44,9 +44,11 @@ if(defined('VERSION') === false) {
 	define('VERSION','0.1.2');
 }
 
-
+define('CLASSE_ORIGIN',INCLUDE_PATH .'entity/table/');	
+define('CLASSE_EXTENDS',INCLUDE_PATH .'entity/');
 
 $VisibleConstants = array(
 	'PAGINATION'
 );
+$_SESSION['universe'] = "univers1";
 ?>

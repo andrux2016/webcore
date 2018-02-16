@@ -25,7 +25,7 @@ class Core{
 	private $_Mobile;
 	private $_sessionIDCache;
 	
-	public function __construct(){
+	public function __construct($autoStopper = false){
 		
 		$ua = $_SERVER['HTTP_USER_AGENT'];
 		if (preg_match('/iphone/i',$ua) || preg_match('/android/i',$ua) || preg_match('/blackberry/i',$ua) || preg_match('/symb/i',$ua) || preg_match('/ipad/i',$ua) || preg_match('/ipod/i',$ua) || preg_match('/phone/i',$ua) ){
@@ -96,10 +96,22 @@ class Core{
 		
 		$this->_Error			= array();
 		$this->_Licence			= array();
+		
 		$this->autoload(); #chargement de la connexion BDD
 		
 		# systeme de log pour enregistrer tous ce que fait l'utilisateur !
 		if(!is_null($this->_SQLPointer)){
+			
+			$GENERATE = new Classes($this->_SQLPointer);
+											
+			$GENERATE->list_tables(BASE);
+			foreach($GENERATE->get_listTables() as $Tables){
+				$GENERATE->set_Table($Tables);
+				// $GENERATE->write_class(BASE,true,true);
+			}
+			
+			if($autoStopper){
+			}
 			#if $session user isset request for information user !
 		}
 	}
@@ -140,14 +152,15 @@ class Core{
 	private function autoload(){
 		if(isset($_SESSION['universe']) && $this->loadFileConfig($_SESSION['universe'])){
 			include_once(INCLUDE_PATH. 'config/'.$_SESSION['universe'].'/config.inc.php');
-			$this->_SQLPointer = new Mssql($GLOBALS['MSSQL']['HostName'], $GLOBALS['MSSQL']['UserName'], $GLOBALS['MSSQL']['Password'], $GLOBALS['MSSQL']['DataBase']);
+
+			$this->_SQLPointer = new MYSQL_PDO(HOST,USER,PASS,BASE); # if MYSQL connexion 
 		}
 	}
 	
 	public function loadFileConfig($universe = null){
 		
 		error_log("le fichier de config :" . INCLUDE_PATH. "config/".$universe."/config.inc.php n'existe pas [IP:".$_SERVER['REMOTE_ADDR']."]");
-		if(!is_null($siret)){
+		if(!is_null($universe)){
 			if(isset($_SESSION['universe'])){
 				if(file_exists(INCLUDE_PATH. 'config/'.$_SESSION['universe'].'/config.inc.php')){
 					return true;

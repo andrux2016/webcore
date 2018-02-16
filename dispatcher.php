@@ -14,10 +14,17 @@ session_start();
 require_once('constant.php'); # les constants obligatoires
 include(INCLUDE_PATH.'tools/minify.php');
 
+
+# entity
+$entities = glob(CLASSE_ORIGIN .'*.php');
+foreach($entities as $entity) {
+	include($entity);
+}
 # class obligatoire
 include(INCLUDE_PATH.'classes/core/class.pdo_connect.php');
 include(INCLUDE_PATH.'classes/core/connexion/class.mssql.php');
 include(INCLUDE_PATH.'classes/core/connexion/class.mysql.php');
+include(INCLUDE_PATH.'classes/core/class.model_class.php');
 include(INCLUDE_PATH.'classes/core/class.core.php');
 
 # class dependante de la connexion
