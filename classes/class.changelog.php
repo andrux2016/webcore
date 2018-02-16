@@ -9,7 +9,6 @@
  *
  * create 2018 by  mandalorien
  */
- 
 class Changelog extends Controllers{
 	
 	private $_Template;
@@ -22,26 +21,30 @@ class Changelog extends Controllers{
 		$this->_Template = new Template();
 		$this->_Message = new Message();
 		
-		# theme loading
-		parent::param("theme","css");
-		parent::param("list-group","css");
-		parent::param("badge","css");
-		parent::param("align","css");
-		parent::param("label","css");
-		parent::param("jquery.min","js");
+		parent::param("theme","css"); #min
+		parent::param("list-group","css"); #min
+		parent::param("badge","css"); #min
+		parent::param("align","css"); #min
+		parent::param("label","css"); #min
+		
+		parent::param("jquery-3.2.1.min","jquery");
+		parent::param("bootstrap.min","jquery");
 
 		# method display loading
+		# Warning : if you put the param (method display) in __construct, you will not be able to call the database.
 		parent::__construct($this->display());
 		
+		# if you want to use a connexion , use this param (method display) in set_Page() and remove param (method display) in __construct
 		parent::loadPage(get_class($this));
 	}
-		
+
 	public function display() {
 		
 		$list = null;
 		$CHANGELOG = array();
 		$CHANGELOG['0.0.0'] = Template::Changelog(Message::LABEL_SUCCESS,'New','Initial commit');
 
+		krsort($CHANGELOG);
 
 		foreach($CHANGELOG as $VERSION=>$DESCRIPTION){
 			

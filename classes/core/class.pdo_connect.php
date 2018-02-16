@@ -9,7 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
-abstract class Pdo_request
+abstract class Pdo_request extends PDO
 {
 	private $_Server;
 	private $_SQLPointer;

@@ -1,0 +1,1 @@
+ <script type="text/javascript" src="{root}{name}{extension}"></script>

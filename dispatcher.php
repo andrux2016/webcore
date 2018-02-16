@@ -12,6 +12,7 @@
 session_start();
 
 require_once('constant.php'); # les constants obligatoires
+include(INCLUDE_PATH.'tools/minify.php');
 
 # class obligatoire
 include(INCLUDE_PATH.'classes/core/class.pdo_connect.php');
@@ -22,9 +23,22 @@ include(INCLUDE_PATH.'classes/core/class.core.php');
 # class dependante de la connexion
 include(INCLUDE_PATH.'classes/core/class.template.php');
 include(INCLUDE_PATH.'classes/core/class.message.php');
+include(INCLUDE_PATH.'classes/core/class.security.php');
+include(INCLUDE_PATH.'classes/core/class.format.php'); # method static
 include(INCLUDE_PATH.'classes/core/class.cache.php'); # method static
 include(INCLUDE_PATH.'classes/core/class.mailer.php');
 include(INCLUDE_PATH.'classes/core/class.controllers.php');
+include(INCLUDE_PATH.'classes/class.auth.php');
 include(INCLUDE_PATH.'classes/core/class.lang.php');
 include(INCLUDE_PATH.'classes/core/class.crypt.php');
+
+include(INCLUDE_PATH.'classes/core/class.flag.php');
+
+########## MODE DEV #############
+// $JsDefault = glob(INCLUDE_PATH .'themes/default/js/*.js');
+
+// foreach($JsDefault as $js) {
+	// $explode = explode(".",basename($js));
+	// file_put_contents(INCLUDE_PATH ."themes/default/js/{$explode[0]}.min.js",JSMin::minify(file_get_contents($js)));
+// }
 ?>

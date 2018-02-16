@@ -9,14 +9,13 @@
  *
  * create 2018 by  mandalorien
  */
- 
 class Mailer{
 	
-	Private $_Expediteur = "mandalorien.wootook@gmail.com";
+	Private $_Expediteur = "adresse@pardefault.com";
 	Private $_Destinataire;
 	Private $_Title;
 	Private $_Contenu;
-	Private $_Organisation = "Webcore";
+	Private $_Organisation = "Organisation";
 	Private $_MultiMail = array();
 	
 	public function __construct($E,$T,$C,$D = null){

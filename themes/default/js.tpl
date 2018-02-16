@@ -1,1 +1,0 @@
- <script type="text/javascript" src="{root}/{name}.js"></script>

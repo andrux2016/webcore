@@ -9,7 +9,6 @@
  *
  * create 2018 by  mandalorien
  */
- 
 class Message{
 	
 	const LABEL_SUCCESS  ='label-success';
@@ -33,19 +32,29 @@ class Message{
 		$this->_Template = new Template();
 	}
 
-	public function Message($titre,$mess,$type) {
+	public function Message($titre,$mess,$type,$button = false) {
 		
 		$parse['titre'] = $titre;
 		$parse['mess'] = $mess;
 		$parse['type'] = $type;
+		if(!$button){
+			$parse['button'] = null;
+		}else{
+			$parse['button'] = $button;
+		}
 		return $this->_Template->displaytemplate(('message'), $parse);
 	}
 
-	public function AlertMessage($titre,$mess,$type) {
+	public function AlertMessage($titre,$mess,$type,$button = false) {
 		
 		$parse['titre'] = $titre;
 		$parse['mess'] = $mess;
 		$parse['type'] = $type;
+		if(!$button){
+			$parse['button'] = null;
+		}else{
+			$parse['button'] = $button;
+		}
 		return $this->_Template->displaytemplate(('message_bulle'), $parse);
 	}
 	

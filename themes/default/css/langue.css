@@ -1,0 +1,34 @@
+.langue {
+    background-image: url('../images/langue.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+	padding:3px;
+}
+
+.sprite-france-flag-3d-round-icon-64 {
+	cursor:pointer;
+    width: 64px;
+    height: 64px;
+    background-position: -5px -5px;
+}
+
+.sprite-germany-flag-3d-round-icon-64 {
+	cursor:pointer;
+    width: 64px;
+    height: 64px;
+    background-position: -79px -5px;
+}
+
+.sprite-italy-flag-3d-round-icon-64 {
+	cursor:pointer;
+    width: 64px;
+    height: 64px;
+    background-position: -5px -79px;
+}
+
+.sprite-united-kingdom-flag-3d-round-icon-64 {
+	cursor:pointer;
+    width: 64px;
+    height: 64px;
+    background-position: -79px -79px;
+}

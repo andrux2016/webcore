@@ -1,0 +1,1 @@
+<label class="text" data-translate="LABEL_{label_name}">{label_name_translate} </label>:

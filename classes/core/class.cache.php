@@ -9,55 +9,60 @@
  *
  * create 2018 by  mandalorien
  */
- 
 class Cache{
 	
-	const ENABLE = false; //boolean
-	const TIME_CACHE = 60*10; //second
+	const ENABLE = true; //boolean
+	const TIME_CACHE = 600; //second 60 * 10
 	const FOLDER_CACHE = "cache"; //string
 	const SCINDER = 2;
 	const LIMIT_CARACT = 10; // mandatory even number
 	
-	
-	static function namefile($name,$decode = false){
-		if(!$decode){
-			return self::recursif(substr(md5($name),0,self::LIMIT_CARACT));
-		}else{
-			return self::recursif(substr(md5($name),0,self::LIMIT_CARACT));
-		}
-	}
-	
 	static function create_cache($nameCache,$data)
 	{
-		error_log("creation du fichier cache :". self::namefile($nameCache).'.cache');
-		file_put_contents(self::namefile($nameCache).'.cache',$data);
+		if(!self::exist_cache($nameCache)){
+			if(env_dev){
+				error_log("creation du fichier cache :". Format::namefile($nameCache).'.cache');
+			}
+
+			//last version
+			// file_put_contents(Format::namefile($nameCache).'.cache',self::compile($data));
+			
+			ob_start();
+			echo Format::compile($data);
+			$tampon = ob_get_contents();
+			file_put_contents(Format::namefile($nameCache).'.cache', $tampon) ; //pour une meilleure organisation, on créera un répertoire cache pour y stocker les fichiers du cache
+			ob_end_clean(); // toujours fermer et vider le tampon
+		}
 	}
 	
 	static function read_cache($nameCache)
 	{
-		error_log("Lecture du fichier cache :" . self::namefile($nameCache).'.cache');
-		echo file_get_contents(self::namefile($nameCache).'.cache');		
+		if(env_dev){
+			error_log("Lecture du fichier cache :" . Format::namefile($nameCache).'.cache');
+		}
+		echo Format::compile(file_get_contents(Format::namefile($nameCache).'.cache'));		
 	}
 	
 	static function exist_cache($nameCache)
 	{
-		if (file_exists(self::namefile($nameCache) .'.cache')) {
+		if (file_exists(Format::namefile($nameCache) .'.cache')) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	static function delete_cache($nameCache,$time = null)
+	static function delete_cache($nameCache)
 	{
-		$timer = is_null($time) ? self::TIME_CACHE : $time;
 		if(self::exist_cache($nameCache)){
-			$modif_ago = time() - filemtime(self::namefile($nameCache) .'.cache');
-			if($modif_ago > $timer)
+			$modif_ago = time() - filemtime(Format::namefile($nameCache) .'.cache');
+			if($modif_ago > self::TIME_CACHE)
 			{
-				error_log("suppression du fichier cache :". self::namefile($nameCache) .'.cache');
-				unlink(self::namefile($nameCache) .'.cache');
-				$listFolder = explode(DIRECTORY_SEPARATOR,self::namefile($nameCache));
+				if(env_dev){
+					error_log("suppression du fichier cache :". Format::namefile($nameCache) .'.cache');
+				}
+				unlink(Format::namefile($nameCache) .'.cache');
+				$listFolder = explode(DIRECTORY_SEPARATOR,Format::namefile($nameCache));
 				
 				$dir = "";
 				for($u = ((count($listFolder) - 1) - (self::LIMIT_CARACT / 2));$u < (count($listFolder) - 1);$u++){
@@ -66,7 +71,9 @@ class Cache{
 
 				$counter = 1;
 				for($i = (count($listFolder) - 1);$i >= ((count($listFolder)) - (self::LIMIT_CARACT / 2));$i--){
-					error_log("suppression des dossiers :". INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . substr($dir,0, - $counter));
+					if(env_dev){
+						error_log("suppression des dossiers :". INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . substr($dir,0, - $counter));
+					}
 					rmdir(INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . substr($dir,0, - $counter)); # on supprimer en recursif les dossiers
 					$counter += 3;
 				}
@@ -92,9 +99,10 @@ class Cache{
 			return INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . $dir . $name;
 			
 		}else{
-			
+			if(env_dev){
+				error_log(INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . $name);
+			}
 			return INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . $name;
-			error_log(INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . $name);
 		}
 	}
 }

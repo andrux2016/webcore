@@ -16,7 +16,12 @@ $traitement = explode(".",$file);
 $template = new Template();
 $url = explode("/",$_SERVER['REQUEST_URI']);
 $orgineFolder = $url[(count($url)-2)];
-
+if(env_dev){
+	error_log('------- BEGIN REWRITING.PHP -------');
+	error_log($file);
+	error_log($_SERVER['REQUEST_URI']);
+	error_log('------- END REWRITING.PHP -------');
+}
 switch($traitement[(count($traitement)-1)]) {
 	case 'pdf':
 		header('Content-type: application/pdf');
@@ -32,36 +37,86 @@ switch($traitement[(count($traitement)-1)]) {
 	case 'css':
 		if($orgineFolder == "css"){
 			header("Content-type: text/css");
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
 			echo $template->loadTheme("css",$file);
+			// echo $template->loadTheme("css",$file);
 		}
 	break;
 	case 'js':
-		if($orgineFolder == "js" || $orgineFolder == "jquery"){
+		if($orgineFolder == "js"){
 			header("Content-type: application/javascript");
-			echo $template->loadTheme(array("js","jquery"),$file);
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
+			echo $template->loadTheme("js",$file);
+		}elseif($orgineFolder == "jquery"){
+			header("Content-type: application/javascript");
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
+			echo $template->loadTheme("jquery",$file);
 		}
 	break;
 	case 'jpg':
 		if($orgineFolder == "images"){
 			header('content-type:image/jpg');
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
 			echo $template->loadTheme("img",$file);
 		}
 	break;
 	case 'jpeg':
 		if($orgineFolder == "images"){
 			header('content-type:image/jpeg');
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
 			echo $template->loadTheme("img",$file);
 		}
 	break;
 	case 'gif':
 		if($orgineFolder == "images"){
 			header('content-type:image/gif');
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
 			echo $template->loadTheme("img",$file);
 		}
 	break;
 	case 'png':
 		if($orgineFolder == "images"){
 			header('content-type:image/png');
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
+			echo $template->loadTheme("img",$file);
+		}
+		break;
+	case 'ico':
+		if($orgineFolder == "images"){
+			header('content-type:image/ico');
+			header("Pragma-directive:max-age=2592000, public");
+			header("Cache-directive:max-age=2592000, public");
+			header("Cache-control:max-age=2592000, public");
+			header("Pragma:max-age=2592000, public");
+			header("Expires: 2592000");
 			echo $template->loadTheme("img",$file);
 		}
 		break;

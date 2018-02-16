@@ -80,6 +80,3 @@ a.label:focus {
 .label-danger[href]:focus {
     background-color: #9a161a
 }
-p {
-    margin: 0 0 10px
-}

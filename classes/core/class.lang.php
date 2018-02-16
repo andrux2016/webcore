@@ -9,7 +9,6 @@
  *
  * create 2018 by  mandalorien
  */
- 
 class Lang{
 	
 	CONST DEFAULT_LANG = "en";
@@ -29,20 +28,27 @@ class Lang{
 	
 	public function __construct($lang = null,$SQLPointer = null){
 		
-		if(!is_null($SQLPointer)){
-			$this->_SQLPointer = $SQLPointer;
-		}
 		$this->_lang = is_null($lang) ? strtolower(self::DEFAULT_LANG) : strtolower($lang);
-		
 		# la langue est indiquée , donc maintenant on peut aller chercher dans la BDD
+		
+		$this->_SQLPointer = $SQLPointer;
+		
 		if(!is_null($this->_SQLPointer)){
 			$this->currentLang();
 			$this->autoload();
+		}else{
+			if(is_null($this->_CurrentLang)){
+				$this->autoloadOffline();
+			}
 		}
 	}
 	
 	public function get_Lang(){
 		return $this->_lang;
+	}
+	
+	public function set_Lang($lang){
+		$this->_lang = $lang;
 	}
 	
 	public function get_ListLang(){
@@ -91,7 +97,6 @@ class Lang{
 	public function autoload(){
 		
 		$this->list_Langs();
-		
 		if(in_array(strtolower($this->_lang),$this->get_ListLang())){
 			if(file_exists(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php')){
 				require_once(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php');
@@ -103,7 +108,7 @@ class Lang{
 					
 					foreach($rc->getConstants() as $key=>$constant){
 						if($key!="DEFAULT_LANG" && $key!="DIR_LANG"){
-							$array[$key] = $constant;
+							$array[$key] = utf8_encode($constant);
 						}
 					}
 					
@@ -123,6 +128,23 @@ class Lang{
 		}
 	}
 	
+	private function autoloadOffline(){
+		
+		if(file_exists(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php')){
+			require_once(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php');
+			$classe = lcfirst(strtolower($this->_lang));
+			if(class_exists($classe)){
+				$rc = new ReflectionClass($classe);
+				foreach($rc->getConstants() as $key=>$constant){
+					if($key!="DEFAULT_LANG" && $key!="DIR_LANG"){
+						$array[$key] = utf8_encode($constant);
+					}
+				}
+				$this->set_CurrentLang($array);
+				return true;
+			}
+		}
+	}
 	
 	private function currentLang(){
 		
@@ -134,7 +156,6 @@ class Lang{
 		
 		$CL = $this->_SQLPointer->fetchObject();
 		if(!is_null($CL)){
-			error_log("nombre de caractéres à la sortie de la requete : " .strlen($CL->image));
 			$this->_Id = $CL->id_lang;
 			$this->_Name = $CL->name;
 			$this->_Image = $CL->image;
@@ -166,7 +187,7 @@ class Lang{
 	public function write_class($crush = false,$constructeur = false){
 		
 		$templates = new Template();
-			
+
 		// const table
 		$ParseConst['name'] = strtoupper('LANG');
 		$ParseConst['value'] = strtolower($this->_lang);
@@ -185,7 +206,7 @@ class Lang{
 				$methods = null;
 			}
 			
-			$_REQ = "SELECT * FROM Translations WHERE id_lang = ?";
+			$_REQ = "SELECT * FROM Translations WHERE id_lang = ? ORDER BY name ASC";
 			$_DATA = array();
 			$_DATA[] = $this->_Id;
 			$this->_SQLPointer->Query($_REQ,$_DATA);
@@ -204,6 +225,7 @@ class Lang{
 			$parse['parentclass'] = get_class($this);
 			$classe = $templates->displaytemplate('models/corp_extends',$parse);
 
+			
 			//on s'occupe des création
 			if($crush){
 				file_put_contents(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php', $classe);

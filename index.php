@@ -13,13 +13,13 @@ require_once dirname(__FILE__) .'/dispatcher.php';
 
 $controllers = new Controllers();
 
-$controller = isset($_GET['controllers']) ? $_GET['controllers'] : 'controllers';
+$controller = isset($_GET['controllers']) ? $_GET['controllers'] : 'init';
 $action = isset($_GET['action']) ? $_GET['action'] : 'error';
 $param = isset($_GET['param']) ? $_GET['param'] : null;
-
-// if(!isset($_SESSION['Logged'])){
-	// $auth = new Auth($controllers->SQLPointer());
-// }else{
+	
+if(!isset($_SESSION['Logged'])  || $_SESSION['Logged'] == false){
+	$controllers->actions('auth','login',$param);
+}else{
 	$controllers->actions($controller,$action,$param);
-// }
+}
 ?>
