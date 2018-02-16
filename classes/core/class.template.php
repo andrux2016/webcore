@@ -81,18 +81,18 @@ class Template
 	
 	public function loadTheme($folderTarget,$fileTarget){
 		
+		$readfile = null;
 		if(is_array($folderTarget)){
-			$readfile = null;
 			foreach($folderTarget as $key=>$folder){
-				error_log($this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget);
-				if(file_exists($this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget)){
-					$readfile = $this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget;
+				error_log($this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')). DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget);
+				if(file_exists($this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget)){
+					$readfile = $this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')) . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $fileTarget;
 				}
 			}
 		}else{
-			error_log($this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget);
-			if(file_exists($this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget)){
-				$readfile = $this->_TemplateDir . DIRECTORY_SEPARATOR . $this->_TemplateName . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget;
+			error_log($this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')) . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget);
+			if(file_exists($this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')) . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget)){
+				$readfile = $this->_TemplateDir . DIRECTORY_SEPARATOR . substr($this->_TemplateName, 0, strrpos($this->_TemplateName, 'templates')) . DIRECTORY_SEPARATOR . $folderTarget . DIRECTORY_SEPARATOR . $fileTarget;
 			}		
 		}
 		
