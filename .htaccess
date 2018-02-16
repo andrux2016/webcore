@@ -1,25 +1,8 @@
-#http://www.whatsmyip.org/http-compression-test/ 
-FileETag none
 <IfModule mod_deflate.c>
 	<IfModule mod_filter.c>
 		AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/x-javascript font/ttf application/x-font-ttf font/otf application/x-font-otf font/opentype image/svg+xml
 	</IfModule>
 </IfModule>
-
-# KILL THEM ETAGS
-Header unset ETag
-FileETag none
-
-#Pour les navigateurs incompatibles
-BrowserMatch ^Mozilla/4 gzip-only-text/html
-BrowserMatch ^Mozilla/4\.0[678] no-gzip
-BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
-#ne pas mettre en cache si ces fichiers le sont déjà
-SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|css|js)$ no-gzip
-#les proxies doivent donner le bon contenu
-Header append Vary User-Agent env=!dont-vary
-
 <IfModule mod_filter.c>
     # compress text, html, javascript, css, xml:
     AddOutputFilterByType DEFLATE text/plain
@@ -35,8 +18,6 @@ Header append Vary User-Agent env=!dont-vary
     AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
-
-# BEGIN Cache-Control Headers
 <IfModule mod_headers.c>
 	<FilesMatch "\\.(ico|jpe?g|png|gif|swf)$">
 		Header set Cache-Control "max-age=2592000, public"
@@ -51,7 +32,6 @@ Header append Vary User-Agent env=!dont-vary
 		Header set Cache-Control "max-age=3000, private, must-revalidate"
 	</FilesMatch>
 </IfModule>
-# END Cache-Control Headers
 <IfModule mod_expires.c>
 	ExpiresActive on
 	ExpiresByType */* "access plus 4 days"
@@ -69,15 +49,22 @@ Header append Vary User-Agent env=!dont-vary
 	ExpiresByType application/x-shockwave-flash "access plus 48 hours"
 	ExpiresDefault "access plus 1 days"
 </IfModule>
-
-# protection de la lecture des répertoires
-Options -Indexes
 <IfModule mod_rewrite.c>
 	# Le serveur doit suivre les liens symboliques :
 	Options +FollowSymlinks
+	Options -Indexes
 	RewriteEngine On
-	RewriteBase /
+	RewriteBase /webcore/
 	
+	# http://www.whatsmyip.org/http-compression-test/ 
+
+	#Pour les navigateurs incompatibles
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+	BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+	BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+	#ne pas mettre en cache si ces fichiers le sont déjà
+	SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|css|js)$ no-gzip
 	ErrorDocument 404 link
 
 	RewriteCond %{REQUEST_FILENAME} !-f
