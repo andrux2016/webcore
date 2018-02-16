@@ -41,7 +41,7 @@ class Test extends Controllers{
 		# method display loading
 		# Warning : if you put the param (method display) in __construct, you will not be able to call the database.
 		
-		parent::__construct();
+		parent::__construct(null,true);
 		
 		# inialize connexion
 		$this->_SQLPointer = parent::SQLPointer();

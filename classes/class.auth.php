@@ -31,13 +31,12 @@ class Auth extends Controllers{
 		
 		parent::param("jquery-3.2.1.min","jquery");
 		parent::param("bootstrap.min","jquery");
-		parent::param("sessionStorage.min","js");
 		parent::param("url.min","js");
 		
 		# method display loading
 		# Warning : if you put the param (method display) in __construct, you will not be able to call the database.
 		
-		parent::__construct();
+		parent::__construct(null,true);
 		
 		# inialize connexion
 		$this->_SQLPointer = parent::SQLPointer();
@@ -86,7 +85,9 @@ class Auth extends Controllers{
 			}
 		}
 
-		
+		// $_REQ = "INSERT INTO `langs` (`ID`, `Name`, `Image`, `Code`) VALUES (NULL, 'Test', 'test', 'TE')";
+		// $CL = $this->_SQLPointer->query('fetchObject',$_REQ);
+		// var_dump($CL);
 
 		if(empty($_SESSION['ID']) == true) {
 			session_regenerate_id();

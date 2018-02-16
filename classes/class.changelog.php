@@ -33,7 +33,7 @@ class Changelog extends Controllers{
 
 		# method display loading
 		# Warning : if you put the param (method display) in __construct, you will not be able to call the database.
-		parent::__construct($this->display());
+		parent::__construct($this->display(),true);
 		
 		# if you want to use a connexion , use this param (method display) in set_Page() and remove param (method display) in __construct
 		parent::loadPage(get_class($this));

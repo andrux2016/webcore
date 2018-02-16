@@ -24,7 +24,7 @@ class Controllers extends Core{
 	private $_FilesLoadThemeJs = array();
 	private $_FilesLoadThemeCss = array();
 	
-	public function __construct($page = null){
+	public function __construct($page = null,$autoStopper = false){
 		
 		parent::__construct();
 		
@@ -35,7 +35,9 @@ class Controllers extends Core{
 		$this->_User = parent::User();
 		
 		$_SESSION['LANGUAGE'] = isset($_SESSION['LANGUAGE']) ? $_SESSION['LANGUAGE'] : Lang::DEFAULT_LANG;
-		$this->_Lang = new Lang($_SESSION['LANGUAGE'],$this->_SQLPointer);
+		if($autoStopper){
+			$this->_Lang = new Lang($_SESSION['LANGUAGE'],$this->_SQLPointer);
+		}
 		$this->_Template = new Template();
 		
 		if(!is_null($page)){
