@@ -11,6 +11,8 @@
  */
 class Format {
 	
+	const LIMIT_CARACT = 10; // mandatory even number
+	
 	static function PhoneFormat($n){
 		$text = null;
 		for($i=0;$i <= (strlen($n) -1);$i++){
@@ -47,10 +49,10 @@ class Format {
 		$data = rtrim($data,"\v.");
 		$data = rtrim($data,"\f.");
 		$data = rtrim($data, "\x00..\x1F");
-		return format::minify_html($data);
+		return self::minify_html($data);
 	}
 	
-	static function minify_output($input)
+	static function minify_html($input)
 	{
 		if(trim($input) === "") return $input;
 		// Remove extra white-space(s) between HTML attribute(s)
@@ -95,9 +97,9 @@ class Format {
 	static function namefile($name,$decode = true){
 		$name = $name . md5($_SERVER['QUERY_STRING']);
 		if(!$decode){
-			return self::recursif(substr($name,0,self::LIMIT_CARACT));
+			return Cache::recursif(substr($name,0,self::LIMIT_CARACT));
 		}else{
-			return self::recursif(substr(self::stringEncode($name),0,self::LIMIT_CARACT));
+			return Cache::recursif(substr(self::stringEncode($name),0,self::LIMIT_CARACT));
 		}
 	}
 	

@@ -15,7 +15,6 @@ class Cache{
 	const TIME_CACHE = 600; //second 60 * 10
 	const FOLDER_CACHE = "cache"; //string
 	const SCINDER = 2;
-	const LIMIT_CARACT = 10; // mandatory even number
 	
 	static function create_cache($nameCache,$data)
 	{
@@ -65,12 +64,12 @@ class Cache{
 				$listFolder = explode(DIRECTORY_SEPARATOR,Format::namefile($nameCache));
 				
 				$dir = "";
-				for($u = ((count($listFolder) - 1) - (self::LIMIT_CARACT / 2));$u < (count($listFolder) - 1);$u++){
+				for($u = ((count($listFolder) - 1) - (Format::LIMIT_CARACT / 2));$u < (count($listFolder) - 1);$u++){
 					$dir .= $listFolder[$u] . DIRECTORY_SEPARATOR;
 				}
 
 				$counter = 1;
-				for($i = (count($listFolder) - 1);$i >= ((count($listFolder)) - (self::LIMIT_CARACT / 2));$i--){
+				for($i = (count($listFolder) - 1);$i >= ((count($listFolder)) - (Format::LIMIT_CARACT / 2));$i--){
 					if(env_dev){
 						error_log("suppression des dossiers :". INCLUDE_PATH . self::FOLDER_CACHE . DIRECTORY_SEPARATOR . substr($dir,0, - $counter));
 					}
