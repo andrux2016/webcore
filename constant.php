@@ -41,7 +41,7 @@ define('MANAGEMENT_LANG',true);
 define('LIMIT_CARACTERS_AMOUNT',15);
 
 if(defined('VERSION') === false) {
-	define('VERSION','2.3.4');
+	define('VERSION','0.1.2');
 }
 
 

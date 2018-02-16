@@ -193,6 +193,7 @@ class Controllers extends Core{
 		
 		$menuli = null;
 		$_GET['controllers'] = isset($_GET['controllers']) ? $_GET['controllers'] : "";
+		$this->_Parse['Link'] = parent::urlPath();
 		$this->_Parse['Param'] = isset($_GET['param']) ? "?param=".$_GET['param'] : "";
 		$this->_Parse['menuli'] = $menuli;
 
