@@ -20,6 +20,7 @@ $entities = glob(CLASSE_ORIGIN .'*.php');
 foreach($entities as $entity) {
 	include($entity);
 }
+
 # class obligatoire
 include(INCLUDE_PATH.'classes/core/class.pdo_connect.php');
 include(INCLUDE_PATH.'classes/core/connexion/class.mssql.php');
