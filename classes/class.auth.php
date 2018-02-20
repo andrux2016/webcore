@@ -42,6 +42,8 @@ class Auth extends Controllers{
 		$this->_SQLPointer = parent::SQLPointer();
 		$this->_Lang = parent::lang();
 		
+		parent::Menu(15); # reference in Controllers
+		
 		# method display loading
 		parent::set_Page($this->display());
 		parent::loadPage(get_class($this));

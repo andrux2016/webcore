@@ -1,5 +1,1 @@
-<li>
-	<a href="{Link}/{method}/">
-		<i class="fa fa-{fa}"></i> <span class="text" data-translate="{menu_translate}">{menu_name}</span>
-	</a>
-</li>
+<li><a href='{Link}/{method}/' title='{menu_name}'><span class="text" data-translate="{menu_translate}">{menu_name}</span></a></li>

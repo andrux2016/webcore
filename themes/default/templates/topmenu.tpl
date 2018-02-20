@@ -10,9 +10,7 @@
 	</div>
 	<div class="navbar-collapse collapse navbar-responsive-collapse">
 		<ul class="nav navbar-nav">
-			<li class='first'><a href='{link}page/accueil' title='{home}'>{home}</a></li>
-			<li><a href='{link}page/inscription' title='{register}'>{register}</a></li>
-			<!--<li><a href='{link}page/reglement' title='{rule}'>{rule}</a></li>-->
+			{menuli}
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li> <a href="#"> <span id="dateheure"></span> </a> </li>

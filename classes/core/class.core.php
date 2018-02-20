@@ -107,7 +107,7 @@ class Core{
 			$GENERATE->list_tables(BASE);
 			foreach($GENERATE->get_listTables() as $Tables){
 				$GENERATE->set_Table($Tables);
-				// $GENERATE->write_class(BASE,true,true);
+				$GENERATE->write_class(BASE,true,true);
 			}
 			
 			if($autoStopper){

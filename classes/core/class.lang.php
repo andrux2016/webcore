@@ -152,7 +152,7 @@ class Lang{
 		$_DATA[] = strtolower($this->_lang);
 		
 		$_REQ = "SELECT * FROM ". Entity_Langs::TABLE ." WHERE ". Entity_Langs::CODE ." = ?";
-		$CL = $this->_SQLPointer->query('fetchObject',$_REQ,$_DATA);
+		$CL = $this->_SQLPointer->query(Pdo_request::FETCH_OBJECT,$_REQ,$_DATA);
 		if(!is_null($CL)){
 			$this->_Id = $CL->ID;
 			$this->_Name = $CL->Name;
@@ -169,7 +169,7 @@ class Lang{
 		
 		$_ARRAY = array();
 		$_REQ = "SELECT * FROM ". Entity_Langs::TABLE;
-		$Lists = $this->_SQLPointer->query('fetchAll',$_REQ);
+		$Lists = $this->_SQLPointer->query(Pdo_request::FETCHALL,$_REQ);
 		if(!is_null($Lists)){
 			foreach($Lists AS $key=>$lang){
 				$this->set_ListLang(strtolower($lang->Code));
@@ -204,7 +204,7 @@ class Lang{
 			$_REQ = "SELECT * FROM ". Entity_Translations::TABLE ." WHERE ". Entity_Translations::LANGID ." = ? ORDER BY ". Entity_Translations::NAME ." ASC";
 			$_DATA = array();
 			$_DATA[] = $this->_Id;
-			foreach($this->_SQLPointer->query('fetchAll',$_REQ,$_DATA) as $columns){
+			foreach($this->_SQLPointer->query(Pdo_request::FETCHALL,$_REQ,$_DATA) as $columns){
 				// attributes
 				$ParseConst['name'] = strtoupper($columns->Name);
 				$ParseConst['value'] = $columns->Value;

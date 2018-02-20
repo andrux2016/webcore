@@ -138,6 +138,7 @@ class Controllers extends Core{
 	}
 	
 	protected function Menu($var){
+		$this->_Menu = $var;
 	}
 	
 	private function loadfile($name,$type,$isUrl){
@@ -188,12 +189,30 @@ class Controllers extends Core{
 		$this->_Parse = $this->_Lang->_l();
 		$this->_Parse['Link'] = parent::urlPath();
 		$this->_Parse['ManagementLang'] = (MANAGEMENT_LANG) ? $this->_Template->displaytemplate('management_lang',$this->_Parse)  : "";
+		
 		return $this->_Template->displaytemplate('header_title',$this->_Parse);
 	}
 	
 	private function topmenu(){
 		
 		$menuli = null;
+		$_GET['controllers'] = isset($_GET['controllers']) ? $_GET['controllers'] : "";
+		$this->_Parse['Param'] = isset($_GET['param']) ? "?param=".$_GET['param'] : "";
+		
+		$flags = new Flags($this->_SQLPointer,null);
+		if($this->_Menu > 0){
+			$ListMenu = explode(",",$flags->loadNameFlag($this->_Menu,'MENU'));
+			foreach($ListMenu as $menu){
+				$name = trim($menu);
+				$this->_Parse['menu_translate'] =strtoupper($name);
+				$this->_Parse['Link'] = parent::urlPath() .'/'. $_GET['controllers'];
+				$this->_Parse['menu_name'] = $this->_Lang->_l(strtoupper($name));
+				$menuli .= $this->_Template->displaytemplate('menu_li',$this->_Parse);
+			}
+		}else{
+			$menuli = null;
+		}
+		$this->_Parse['menuli'] = $menuli;
 		$_GET['controllers'] = isset($_GET['controllers']) ? $_GET['controllers'] : "";
 		$this->_Parse['Link'] = parent::urlPath();
 		$this->_Parse['Param'] = isset($_GET['param']) ? "?param=".$_GET['param'] : "";

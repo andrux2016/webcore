@@ -20,15 +20,12 @@ class Flags{
 	public function __construct($SQLPointer = null,$User = null){
 		
 		$this->_SQLPointer = $SQLPointer;
-		
 		if(!is_null($this->_SQLPointer)){
 			$this->_User = $User;
 			$this->_Template = new Template();
 			
-			$Request  = 'SELECT * FROM Flags';
-			$this->_SQLPointer->Query($Request);
-			$flags = $this->_SQLPointer->fetchAll();
-			$this->_Flags = $flags;
+			$Request  = "SELECT * FROM ".Entity_Flags::TABLE;
+			$this->_Flags = $this->_SQLPointer->query(Pdo_request::FETCHALL,$Request);
 		}
 	}
 	
@@ -46,11 +43,11 @@ class Flags{
 		$array = array();
 		$Data = array();
 		
-		$Request = 'SELECT COUNT(*) as total FROM Flags WHERE types = ?';
+		$Request = "SELECT COUNT(*) as total FROM ".Entity_Flags::TABLE." WHERE ". Entity_Flags::TYPE ." = ?";
 		$Data[] = $type;
-		if($this->_SQLPointer->Query($Request, $Data))
+		$flags = $this->_SQLPointer->query(Pdo_request::FETCH_OBJECT,$Request,$Data);
+		if($flags)
 		{
-			$flags = $this->_SQLPointer->fetchObject();
 			$amount = $flags->total;
 			
 			for($i = $amount-1; $i >= 0;$i--){
@@ -77,22 +74,17 @@ class Flags{
 		$Data = array();
 		$i = 0;
 		
-		$Request = 'SELECT * FROM Flags WHERE types = ? ORDER by orders ASC';
-		$Data[] = $type;
-		$this->_SQLPointer->Query($Request, $Data);
-		
-		
 		foreach($this->_Flags as $flag)
 		{
-			if($type == $flag->types)
+			if($type == $flag->Type)
 			{
-				$this->_Parse['name'] = utf8_encode($flag->name);
-				$this->_Parse['id'] = $flag->id_flag;
+				$this->_Parse['name'] = utf8_encode($flag->Name);
+				$this->_Parse['id'] = $flag->ID;
 				$this->_Parse['checkbox_name'] = $type;
 				$this->_Parse['checkbox_val'] = intval($i);
 				if($this->load_flag($valeur,$type)){
 					if(in_array($i,$this->load_flag($valeur,$type))){
-						if(pow(2,$i) == $flag->value_flag){
+						if(pow(2,$i) == $flag->Value){
 							
 							$this->_Parse['is_checked'] = 'checked';
 						}else{
@@ -121,7 +113,7 @@ class Flags{
 		$text = null;
 		foreach($this->_Flags as $flag)
 		{
-			if($typeFlag == $flag->types)
+			if($typeFlag == $flag->Type)
 			{
 				// $text .= $flag->name;
 				$compteur ++;
@@ -140,10 +132,10 @@ class Flags{
 		
 		foreach($this->_Flags as $flag)
 		{
-			if($typeFlag == $flag->types)
+			if($typeFlag == $flag->Type)
 			{
-				if(in_array($flag->value_flag,$array)){
-					$text .= utf8_encode($flag->name) .' ,';
+				if(in_array($flag->Value,$array)){
+					$text .= utf8_encode($flag->Name) .' ,';
 				}
 			}
 		}
@@ -163,7 +155,7 @@ class Flags{
 		$text = null;
 		foreach($this->_Flags as $flag)
 		{
-			if($typeFlag == $flag->types)
+			if($typeFlag == $flag->Type)
 			{
 				// $text .= $flag->name;
 				$compteur ++;
@@ -182,10 +174,10 @@ class Flags{
 		
 		foreach($this->_Flags as $flag)
 		{
-			if($typeFlag == $flag->types)
+			if($typeFlag == $flag->Type)
 			{
-				if(in_array($flag->value_flag,$array)){
-					array_push($FlagsName,utf8_encode($flag->name));
+				if(in_array($flag->Value,$array)){
+					array_push($FlagsName,utf8_encode($flag->Name));
 				}
 			}
 		}
