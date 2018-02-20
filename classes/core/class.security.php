@@ -166,5 +166,17 @@ class Security {
 		
 		return utf8_decode($msg);
 	}
+	
+	/* function SecurePassword
+	 * paramètres :
+	 *
+	 * $text de type varchar (8 si il est generer)
+	 */
+	static function Token($text)
+	{
+		$pass = hash("tiger192,3",sha1($text));
+
+		return $pass;
+	}
 }
 ?>
