@@ -130,8 +130,8 @@ class Classes
 	
 
 	public function list_tables($database){
-		$SQL  = "SHOW TABLES FROM " . $database;
-		$Lists = $this->_PDO->query('fetchAll',$SQL);
+		$SQL  = "SHOW TABLES FROM ". $database;
+		$Lists = $this->_PDO->query(Pdo_request::FETCHALL,$SQL);
 		foreach($Lists As $count => $tables){
 			foreach($tables as $table){
 				array_push($this->_ListTables,$table);
@@ -142,7 +142,7 @@ class Classes
 	
 	private function list_columns(){
 		$SQL  = "SHOW COLUMNS FROM ". $this->_Table;
-		return $this->_PDO->query('fetchAll',$SQL);
+		return $this->_PDO->query(Pdo_request::FETCHALL,$SQL);
 	}
 	
 	public function removePrefix($table){

@@ -11,6 +11,10 @@
  */
 abstract class Pdo_request
 {
+	const FETCH = "fetch";
+	const FETCHALL = "fetchAll";
+	const FETCH_OBJECT = "fetchObject";
+	
 	private $_Server;
 	private $_SQLPointer;
 	private $_Ressource;
@@ -106,7 +110,7 @@ abstract class Pdo_request
 					$this->_Ressource = $this->_SQLPointer->prepare($Query);
 					
 					try {
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->beginTransaction();
 						}
 						
@@ -117,13 +121,13 @@ abstract class Pdo_request
 							$Return = $this->_Ressource->execute();
 						}
 						
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->commit();
 							$Result = true;
 						}
 					}
 					catch(Exception $Error) {
-						if(preg_match("/insert/i",$Query) || preg_match("/update/i",$Query) || preg_match("/delete/i",$Query)) {
+						if(substr_count(strtoupper($Query),'SELECT') <= 0) {
 							$this->rollBack();
 							$Result = false;
 						}
@@ -138,20 +142,18 @@ abstract class Pdo_request
 				break;
 		}
 		
-		if(substr_count(strtoupper($Query),'SELECT') <= 0) {
-			switch($type){
-				case 'fetch':
-					$Result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
+		switch($type){
+			case self::FETCH:
+				$Result = $this->_Ressource->fetch(PDO::FETCH_ASSOC);
+			break;
+			case self::FETCH_OBJECT:
+				$Result = $this->_Ressource->fetchObject();
 				break;
-				case 'fetchObject':
-					$Result = $this->_Ressource->fetchObject();
-					break;
-				case 'fetchAll':
-					$Result = $this->_Ressource->fetchAll(PDO::FETCH_OBJ);
-					break;
-			}
+			case self::FETCHALL:
+				$Result = $this->_Ressource->fetchAll(PDO::FETCH_OBJ);
+				break;
 		}
-	
+		
 		return $Result;
 	}
 		
