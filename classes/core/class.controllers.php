@@ -82,18 +82,7 @@ class Controllers extends Core{
 							error_log("la methode {$nameMethod} de la classe {$nameClass} n'existe pas .");
 						}
 					}
-				}else{
-					if($rc->hasMethod($nameMethod) && $nameMethod == "display"){ # secure else execute 2 methods
-						$reflectionMethod = new ReflectionMethod($classe,$nameMethod); # loading the desired method
-						if(is_null($param)){
-							return $reflectionMethod->invoke($obj);
-						}else{
-							return $reflectionMethod->invoke($obj,$param); #$reflectionMethod->invoke($obj,$param); param is mixed (type string or array).
-						}
-					}
 				}
-				
-				
 			}else{
 				error_log("la classe {$nameClass} n'existe pas .");
 			}
@@ -140,46 +129,10 @@ class Controllers extends Core{
 	protected function Menu($var){
 		$this->_Menu = $var;
 	}
-	
-	private function loadfile($name,$type,$isUrl){
-		if(!$isUrl){
-			$this->_Parse['name'] = $name;
-			$this->_Parse['root'] = parent::urlPath(). '/' .$type. '/';					
-		}else{
-			$this->_Parse['name'] = "";
-			$this->_Parse['root'] = $name;
-		}
 
-		
-		switch($type) {
-			case 'css':
-				if(!$isUrl){
-					$this->_Parse['extension'] = ".css";			
-				}else{
-					$this->_Parse['extension'] = "";
-				}
-			
-				return $this->_Template->displaytemplate('css',$this->_Parse).PHP_EOL;
-				break;
-			case 'js':
-			case 'jquery':
-			
-				if(!$isUrl){
-					$this->_Parse['extension'] = ".js";			
-				}else{
-					$this->_Parse['extension'] = "";
-				}
-				return $this->_Template->displaytemplate('js',$this->_Parse).PHP_EOL;
-				break;
-			default:{
-				// creer une méthod qui renvoi l'IP de la personne eassyant d'accéder à une autre config !
-				return null;
-				break;
-			}
-		}
-	}
 	
 	private function sidebar(){
+		
 		$this->_Parse = $this->_Lang->_l();
 		$this->_Parse['title_website'] = "";
 		return $this->_Template->displaytemplate('sidebar',$this->_Parse);
@@ -279,6 +232,45 @@ class Controllers extends Core{
 		}
 	}
 	
+	### Loading CSS ###
+	private function loadfile($name,$type,$isUrl){
+		if(!$isUrl){
+			$this->_Parse['name'] = $name;
+			$this->_Parse['root'] = parent::urlPath(). '/' .$type. '/';					
+		}else{
+			$this->_Parse['name'] = "";
+			$this->_Parse['root'] = $name;
+		}
+
+		
+		switch($type) {
+			case 'css':
+				if(!$isUrl){
+					$this->_Parse['extension'] = ".css";			
+				}else{
+					$this->_Parse['extension'] = "";
+				}
+			
+				return $this->_Template->displaytemplate('css',$this->_Parse).PHP_EOL;
+				break;
+			case 'js':
+			case 'jquery':
+			
+				if(!$isUrl){
+					$this->_Parse['extension'] = ".js";			
+				}else{
+					$this->_Parse['extension'] = "";
+				}
+				return $this->_Template->displaytemplate('js',$this->_Parse).PHP_EOL;
+				break;
+			default:{
+				// creer une méthod qui renvoi l'IP de la personne eassyant d'accéder à une autre config !
+				return null;
+				break;
+			}
+		}
+	}
+	
 	protected function param($name,$type,$isUrl = false){
 		switch($type) {
 			case 'css':
@@ -307,159 +299,6 @@ class Controllers extends Core{
 				$this->_FilesLoadThemeJs = array();
 				break;
 		}
-	}
-	
-	protected function loadFields($class,$array,$form,$edit = true){
-		$view = "";
-		foreach($form as $key=>$datas){
-			$this->_Parse['name'] = $key;
-			$this->_Parse['label_name_translate'] = $this->_Lang->_l('LABEL_'.strtoupper($key));
-			$this->_Parse['label_name'] = strtoupper($key);
-			$this->_Parse['label'] = $this->_Template->displaytemplate('label',$this->_Parse);
-			if($edit){
-				$this->_Parse['value'] = utf8_encode(trim($array->$key));
-			}else{
-				$this->_Parse['value'] = "";
-			}
-			
-			switch($datas["type"]){
-				case 'extra':
-				case 'hidden':
-					$view .= $this->_Template->displaytemplate('hidden',$this->_Parse);
-					// $view .= $this->_Template->displaytemplate('form',$this->_Parse);
-				break;
-				case 'textarea':
-					$this->_Parse['field'] = $this->_Template->displaytemplate('textarea',$this->_Parse);
-					$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-				break;
-				case 'string':
-					$this->_Parse['field'] = $this->_Template->displaytemplate('input',$this->_Parse);
-					$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-				break;
-				case 'password':
-					$this->_Parse['field'] = $this->_Template->displaytemplate('password',$this->_Parse);
-					$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-				break;
-				case 'int':
-					$this->_Parse['field'] = $this->_Template->displaytemplate('input',$this->_Parse);
-					$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-				break;
-				case 'radio': # 2 values
-					if(!is_null($datas["data"])){
-						#foreach
-						while(list($keys, $result) = each($datas["data"])){
-							$this->_Parse['name'] = $datas["name"].'[]';
-							$this->_Parse['name_id'] = $datas["data"][$keys][$key];
-							$fields .= $this->_Template->displaytemplate('radio',$this->_Parse);
-						}
-						#end foreach
-						$this->_Parse['field'] = $fields;
-						$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-					}
-				break;
-				case 'checkbox':  # > 1 values
-					if(!is_null($datas["data"])){
-						#foreach
-						while(list($keys, $result) = each($datas["data"])){
-							$this->_Parse['name'] = $datas["name"].'[]';
-							$this->_Parse['name_id'] = $datas["data"][$keys][$key];
-							$fields .= $this->_Template->displaytemplate('checkbox',$this->_Parse);
-						}
-						#end foreach
-						$this->_Parse['field'] = $fields;
-						$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-					}
-				break;
-				case 'select':  # > 1 values
-					if(!is_null($datas["data"])){
-						$this->_Parse['options'] = null;
-						$this->_Parse['multiple'] = null;
-						$this->_Parse['selected'] = null;
-						#foreach
-						while(list($keys, $result) = each($datas["data"])){
-							if($edit){
-								$this->_Parse['selected'] = (intval($datas["selected"]) == intval($datas["data"][$keys][$datas["id"]])) ? 'selected' : '';
-							}
-							$this->_Parse['name'] = $datas["data"][$keys][$datas["alias"]];
-							$this->_Parse['value'] =  $datas["data"][$keys][$datas["id"]];
-							$this->_Parse['options'] .= $this->_Template->displaytemplate('option',$this->_Parse);
-						}
-						#end foreach
-						$this->_Parse['name'] = $datas["name"];
-						$this->_Parse['field'] = $this->_Template->displaytemplate('select',$this->_Parse);
-						$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-					}
-				break;
-				case 'multi':  # > 1 values
-					if(!is_null($datas["data"])){
-						$this->_Parse['options'] = null;
-						$this->_Parse['multiple'] = "multiple";
-						$this->_Parse['selected'] = null;
-						#foreach
-						while(list($keys, $result) = each($datas["data"])){
-							if($edit){
-								$this->_Parse['selected'] = (intval($datas["selected"]) == intval($datas["data"][$keys][$datas["id"]])) ? 'selected' : '';
-							}
-							$this->_Parse['name'] = $datas["data"][$keys][$datas["alias"]];
-							$this->_Parse['value'] =  $datas["data"][$keys][$datas["id"]];
-							$this->_Parse['options'] .= $this->_Template->displaytemplate('option',$this->_Parse);
-						}
-						#end foreach
-						$this->_Parse['name'] = $datas["name"].'[]';
-						$this->_Parse['field'] = $this->_Template->displaytemplate('select',$this->_Parse);
-						$view .= $this->_Template->displaytemplate('form',$this->_Parse);
-					}
-				break;
-			}
-		}
-		
-		$this->_Parse['name'] = $class;
-		$this->_Parse['value'] = 'Valider';
-		$view .= $this->_Template->displaytemplate('button',$this->_Parse);
-		return $view;
-	}
-	
-	protected function tableSearchLoadField($class,$array,$form){
-		
-		$view = "";
-		
-		foreach($form as $key=>$datas){
-			$this->_Parse['name'] = $key;
-			$this->_Parse['label_name_translate'] = $this->_Lang->_l('LABEL_'.strtoupper($key));
-			$this->_Parse['label_name'] = strtoupper($key);
-			$this->_Parse['value'] = "";
-			
-			switch($datas["type"]){
-				case 'hidden':
-					$this->_Parse['field'] = null;
-					$view .= $this->_Template->displaytemplate('td',$this->_Parse);
-				break;
-				case 'string':
-					$this->_Parse['field'] = $this->_Template->displaytemplate('input',$this->_Parse);
-					$view .= $this->_Template->displaytemplate('td',$this->_Parse);
-				break;
-				case 'select':  # > 1 values
-					if(!is_null($datas["data"])){
-						$this->_Parse['options'] = null;
-						$this->_Parse['multiple'] = null;
-						#foreach
-						while(list($keys, $result) = each($datas["data"])){
-							$this->_Parse['selected'] = (intval($datas["selected"]) == intval($datas["data"][$keys][$datas["id"]])) ? 'selected' : '';
-							$this->_Parse['name'] = $datas["data"][$keys][$key];
-							$this->_Parse['value'] =  $datas["data"][$keys][$datas["id"]];
-							$this->_Parse['options'] .= $this->_Template->displaytemplate('option',$this->_Parse);
-						}
-						#end foreach
-						$this->_Parse['name'] = $datas["name"];
-						$this->_Parse['field'] = $this->_Template->displaytemplate('select',$this->_Parse);
-						$view .= $this->_Template->displaytemplate('td',$this->_Parse);
-					}
-				break;
-			}
-		}
-		$this->_Parse['td'] = $view;
-		$this->_Parse['idName'] = $class;
-		return $this->_Template->displaytemplate('search_tr',$this->_Parse);
 	}
 	
 	protected function search($from,$search,$fields = null,$NotAnd = false){}
