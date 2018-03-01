@@ -32,6 +32,7 @@ include(INCLUDE_PATH.'classes/core/class.core.php');
 include(INCLUDE_PATH.'classes/core/class.template.php');
 include(INCLUDE_PATH.'classes/core/class.message.php');
 include(INCLUDE_PATH.'classes/core/class.security.php');
+include(INCLUDE_PATH.'classes/core/class.logs.php');
 include(INCLUDE_PATH.'classes/core/class.format.php'); # method static
 include(INCLUDE_PATH.'classes/core/class.cache.php'); # method static
 include(INCLUDE_PATH.'classes/core/class.mailer.php');

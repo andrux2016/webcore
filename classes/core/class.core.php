@@ -24,8 +24,10 @@ class Core{
 	private $_User;
 	private $_Mobile;
 	private $_sessionIDCache;
+	private $_Logs;
 	
 	public function __construct($autoStopper = false){
+		
 		
 		$ua = $_SERVER['HTTP_USER_AGENT'];
 		if (preg_match('/iphone/i',$ua) || preg_match('/android/i',$ua) || preg_match('/blackberry/i',$ua) || preg_match('/symb/i',$ua) || preg_match('/ipad/i',$ua) || preg_match('/ipod/i',$ua) || preg_match('/phone/i',$ua) ){
@@ -100,10 +102,14 @@ class Core{
 		$this->autoload(); #chargement de la connexion BDD
 		
 		# systeme de log pour enregistrer tous ce que fait l'utilisateur !
+		
 		if(!is_null($this->_SQLPointer)){
 			
+			if(is_null($this->_Logs)){
+				$this->_Logs = new Logs($this->_SQLPointer);
+			}
+			
 			$GENERATE = new Classes($this->_SQLPointer);
-											
 			$GENERATE->list_tables(BASE);
 			foreach($GENERATE->get_listTables() as $Tables){
 				$GENERATE->set_Table($Tables);
@@ -116,6 +122,7 @@ class Core{
 		}
 	}
 
+	protected function Logs(){return $this->_Logs;}
 	protected function get_SessionIDCache(){return $this->_sessionIDCache;}
 	
 	public function multi_Connexion($autoriz){
@@ -159,7 +166,6 @@ class Core{
 	
 	public function loadFileConfig($universe = null){
 		
-		error_log("le fichier de config :" . INCLUDE_PATH. "config/".$universe."/config.inc.php n'existe pas [IP:".$_SERVER['REMOTE_ADDR']."]");
 		if(!is_null($universe)){
 			if(isset($_SESSION['universe'])){
 				if(file_exists(INCLUDE_PATH. 'config/'.$_SESSION['universe'].'/config.inc.php')){
