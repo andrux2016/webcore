@@ -45,6 +45,7 @@ class Auth extends Controllers{
 		parent::Menu(15); # reference in Controllers
 		
 		# method display loading
+		// var_dump(Core::Logs());
 		parent::set_Page($this->display());
 		parent::loadPage(get_class($this));
 		

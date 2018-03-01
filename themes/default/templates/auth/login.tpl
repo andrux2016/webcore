@@ -5,7 +5,7 @@
 	<form class="form-horizontal">
 		<legend>Connexion</legend>
 			<div class="form-group">
-				<label for="inputEmail" class="col-lg-3 control-label" data-translate="LABEL_EMAIL">{LABEL_EMAIL}</label>
+				<label for="inputEmail" class="col-lg-3 control-label" data-translate="LABEL_MAIL">{LABEL_MAIL}</label>
 				<div class="col-lg-9">
 					<input class="form-control" id="inputHost" placeholder="{LABEL_EMAIL}" type="text">
 				</div>
