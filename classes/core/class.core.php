@@ -9,9 +9,10 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Core{
 	
-	const MULTI_CONNECT = true;
+	const MULTI_CONNECT = false;
 	private $_SQLPointer;
 	private $_UrlPath;
 	private $_Licence;
@@ -140,14 +141,14 @@ class Core{
 	private function autoload(){
 		if(isset($_SESSION['universe']) && $this->loadFileConfig($_SESSION['universe'])){
 			include_once(INCLUDE_PATH. 'config/'.$_SESSION['universe'].'/config.inc.php');
-			$this->_SQLPointer = new Mssql($GLOBALS['MSSQL']['HostName'], $GLOBALS['MSSQL']['UserName'], $GLOBALS['MSSQL']['Password'], $GLOBALS['MSSQL']['DataBase']);
+			// $this->_SQLPointer = new Mssql($GLOBALS['MSSQL']['HostName'], $GLOBALS['MSSQL']['UserName'], $GLOBALS['MSSQL']['Password'], $GLOBALS['MSSQL']['DataBase']);
 		}
 	}
 	
 	public function loadFileConfig($universe = null){
 		
 		error_log("le fichier de config :" . INCLUDE_PATH. "config/".$universe."/config.inc.php n'existe pas [IP:".$_SERVER['REMOTE_ADDR']."]");
-		if(!is_null($siret)){
+		if(!is_null($universe)){
 			if(isset($_SESSION['universe'])){
 				if(file_exists(INCLUDE_PATH. 'config/'.$_SESSION['universe'].'/config.inc.php')){
 					return true;
@@ -183,19 +184,24 @@ class Core{
 	}
 	
 	public function redirect($controller,$method = null ,$param = null){
-		if(!is_null($param)){
-			header("Location:".$this->_UrlPath."/".$controller."/".$method."/?param=".$param);
-		}else{
-			if(!is_null($method)){
-				header("Location:".$this->_UrlPath."/".$controller."/".$method."");
-			}else{
-				if($controller == "/"){
-					header("Location:".$this->_UrlPath."/");
-				}else{
-					header("Location:".$this->_UrlPath."/".$controller."/");
-				}
-			}
+		
+		if (preg_match('/\\\\/',$controller)) {
+			$controller = substr($controller,strripos($controller,DIRECTORY_SEPARATOR)+1,strlen($controller));
 		}
+
+		// if(!is_null($param)){
+			// header("Location:".$this->_UrlPath."/".$controller."/".$method."/?param=".$param);
+		// }else{
+			// if(!is_null($method)){
+				// header("Location:".$this->_UrlPath."/".$controller."/".$method."");
+			// }else{
+				// if($controller == "/"){
+					// header("Location:".$this->_UrlPath."/");
+				// }else{
+					// header("Location:".$this->_UrlPath."/".$controller."/");
+				// }
+			// }
+		// }
 	}
 	
 	//method : modules

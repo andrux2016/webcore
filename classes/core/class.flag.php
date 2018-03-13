@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Flags{
 	
 	private $_User;

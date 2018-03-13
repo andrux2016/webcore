@@ -9,7 +9,9 @@
  *
  * create 2018 by  mandalorien
  */
-class Test extends Controllers{
+ 
+namespace CEOS\classes;
+class Test extends core\Controllers{
 	
 	private $_SQLPointer;
 	private $_User;

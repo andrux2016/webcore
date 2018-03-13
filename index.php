@@ -11,7 +11,7 @@
  */
 require_once dirname(__FILE__) .'/dispatcher.php';
 
-$controllers = new Controllers();
+$controllers = new CEOS\classes\core\Controllers();
 
 $controller = isset($_GET['controllers']) ? $_GET['controllers'] : 'init';
 $action = isset($_GET['action']) ? $_GET['action'] : 'error';

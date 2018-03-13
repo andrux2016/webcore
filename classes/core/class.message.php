@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Message{
 	
 	const LABEL_SUCCESS  ='label-success';

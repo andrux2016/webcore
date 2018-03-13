@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Controllers extends Core{
 	
 	const CONTROLLER = "classes/";
@@ -63,10 +64,11 @@ class Controllers extends Core{
 		if(file_exists(INCLUDE_PATH . self::CONTROLLER .'class.'.strtolower($nameClass).'.php')){
 			require_once(INCLUDE_PATH . self::CONTROLLER . 'class.'. strtolower($nameClass).'.php');
 			
-			$classe = ucfirst($nameClass);
+			$classe = sprintf("CEOS\classes\%s",ucfirst($nameClass));
+			// var_dump($classe);
 			if(class_exists($classe)){
 				$obj = new $classe; 
-				$rc = new ReflectionClass($classe);
+				$rc = new \ReflectionClass($classe);
 				if($classe == "Ajax"){
 					if($rc->hasMethod($nameMethod)){ # secure else execute 2 methods
 						$reflectionMethod = new ReflectionMethod($classe,$nameMethod); # loading the desired method
@@ -82,7 +84,7 @@ class Controllers extends Core{
 					}
 				}else{
 					if($rc->hasMethod($nameMethod) && $nameMethod == "display"){ # secure else execute 2 methods
-						$reflectionMethod = new ReflectionMethod($classe,$nameMethod); # loading the desired method
+						$reflectionMethod = new \ReflectionMethod($classe,$nameMethod); # loading the desired method
 						if(is_null($param)){
 							return $reflectionMethod->invoke($obj);
 						}else{

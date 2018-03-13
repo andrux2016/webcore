@@ -9,7 +9,9 @@
  *
  * create 2018 by  mandalorien
  */
-class Changelog extends Controllers{
+ 
+namespace CEOS\classes;
+class Changelog extends core\Controllers{
 	
 	private $_Template;
 	private $_Message;
@@ -18,8 +20,8 @@ class Changelog extends Controllers{
 		
 	public function __construct() {
 		
-		$this->_Template = new Template();
-		$this->_Message = new Message();
+		$this->_Template = new core\Template();
+		$this->_Message = new core\Message();
 		
 		parent::param("theme","css"); #min
 		parent::param("list-group","css"); #min

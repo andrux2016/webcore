@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Lang{
 	
 	CONST DEFAULT_LANG = "en";
@@ -104,7 +105,7 @@ class Lang{
 				$classe = lcfirst(strtolower($this->_lang));
 				if(class_exists($classe)){
 					$obj = new $classe;
-					$rc = new ReflectionClass($classe);
+					$rc = new \ReflectionClass($classe);
 					
 					foreach($rc->getConstants() as $key=>$constant){
 						if($key!="DEFAULT_LANG" && $key!="DIR_LANG"){
@@ -134,7 +135,7 @@ class Lang{
 			require_once(dirname(dirname(dirname( __FILE__ ))) . DIRECTORY_SEPARATOR . self::DIR_LANG . DIRECTORY_SEPARATOR .'class.'.strtolower($this->_lang).'.php');
 			$classe = lcfirst(strtolower($this->_lang));
 			if(class_exists($classe)){
-				$rc = new ReflectionClass($classe);
+				$rc = new \ReflectionClass($classe);
 				foreach($rc->getConstants() as $key=>$constant){
 					if($key!="DEFAULT_LANG" && $key!="DIR_LANG"){
 						$array[$key] = utf8_encode($constant);

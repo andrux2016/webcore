@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 abstract class Pdo_request
 {
 	private $_Server;

@@ -9,7 +9,8 @@
  *
  * create 2018 by  mandalorien
  */
-class Init extends Controllers{
+namespace CEOS\classes;
+class Init extends core\Controllers{
 	
 	private $_SQLPointer;
 	private $_User;
@@ -23,7 +24,7 @@ class Init extends Controllers{
 		
 		$this->_Action = isset($_GET['action']) ? $_GET['action'] : "";
 		$this->_Param = isset($_GET['param']) ? $_GET['param'] : null;
-		$this->_Template = new Template();
+		$this->_Template = new core\Template();
 		
 		# theme loading
 		

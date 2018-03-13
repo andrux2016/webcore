@@ -9,6 +9,8 @@
  *
  * create 2018 by  mandalorien
  */
+ 
+namespace CEOS\classes\Core;
 class Format {
 	
 	const LIMIT_CARACT = 10; // mandatory even number

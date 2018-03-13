@@ -13,8 +13,9 @@ function getBaseURL()
     var url = location.href;
 	var cpt = 0;
     var baseURL = url.substring(0, url.indexOf('/', 14)); 
- 
-	if (baseURL.indexOf('http://localhost') != -1) {
+
+	if(WEBSITE == ""){
+		if (baseURL.indexOf('http://localhost') != -1) {
 			var pathname = location.pathname;
 			var index1 = url.indexOf(pathname);
 			var index2 = url.indexOf("/", index1 + 1);
@@ -25,6 +26,7 @@ function getBaseURL()
 			namePage = namePage.split("/");
 			namePage = namePage[namePage.length - 1];
 
+			console.log(namePage);
 			for(var i = 1;i<=existence.length;i++)
 			{
 				if(existence[i] != '' && typeof existence[i]!="undefined")
@@ -42,16 +44,17 @@ function getBaseURL()
 			}else{
 				return baseLocalUrl;
 			}
-			
-	}
-	else 
-	{
-			var pathname = location.pathname;
-			var index1 = url.indexOf(pathname);
-			var index2 = url.indexOf("/", index1 + 1);
-			var baseLocalUrl = url.substr(0, index2);
+		}
+		else 
+		{
+				var pathname = location.pathname;
+				var index1 = url.indexOf(pathname);
+				var index2 = url.indexOf("/", index1 + 1);
+				var baseLocalUrl = url.substr(0, index2);
 
-		return baseURL;
+			return baseURL;
+		}
+	}else{
+		return WEBSITE;
 	}
 };
-console.log(getBaseURL());

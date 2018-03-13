@@ -10,6 +10,7 @@
  * create 2018 by  mandalorien
  */
 
+namespace CEOS\classes\core;
 class MYSQL_PDO extends Pdo_request{
 	
 	private $_Server	= '127.0.0.1';

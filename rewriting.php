@@ -13,7 +13,7 @@ require_once dirname(__FILE__) .'/dispatcher.php';
 
 $file = $_GET["filename"];
 $traitement = explode(".",$file);
-$template = new Template();
+$template = new CEOS\classes\core\Template();
 $url = explode("/",$_SERVER['REQUEST_URI']);
 $orgineFolder = $url[(count($url)-2)];
 if(env_dev){

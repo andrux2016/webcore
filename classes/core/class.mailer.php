@@ -9,6 +9,7 @@
  *
  * create 2018 by  mandalorien
  */
+namespace CEOS\classes\core;
 class Mailer{
 	
 	Private $_Expediteur = "adresse@pardefault.com";
@@ -62,8 +63,7 @@ class Mailer{
 		$head .= "Organization: ". $this->_Expediteur ." \r\n";
 		$head .= "X-Sender: ". $this->_Organisation ." \r\n";
 		$head .= "X-Priority: 3 \r\n";
-
-		
+		return $head;
 	}
 	
 	private function BodyMail(){

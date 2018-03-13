@@ -9,7 +9,9 @@
  *
  * create 2018 by  mandalorien
  */
-class Ajax extends Controllers{
+ 
+namespace CEOS\classes;
+class Ajax extends core\Controllers{
 	
 	private $_User;
 	private $_SQLPointer;
@@ -22,7 +24,7 @@ class Ajax extends Controllers{
 		
 		$this->_Action = isset($_GET['action']) ? $_GET['action'] : "";
 		$this->_Param = isset($_GET['param']) ? $_GET['param'] : null;
-		$this->_Template = new Template();	
+		$this->_Template = new core\Template();	
 		
 		# method display loading
 		# Warning : if you put the param (method display) in __construct, you will not be able to call the database.
@@ -44,7 +46,7 @@ class Ajax extends Controllers{
 				$language = parent::lang();
 				if(in_array(strtolower($_POST['code']),$language->get_ListLang())){
 					$_SESSION['LANGUAGE'] = $_POST['code'];
-					$language = new Lang($_SESSION['LANGUAGE'],$this->_SQLPointer);
+					$language = new core\Lang($_SESSION['LANGUAGE'],$this->_SQLPointer);
 					$language->set_Lang($_SESSION['LANGUAGE']);
 					echo json_encode($language->_l());
 				}

@@ -9,7 +9,9 @@
  *
  * create 2018 by  mandalorien
  */
-class Auth extends Controllers{
+ 
+namespace CEOS\classes;
+class Auth extends core\Controllers{
 	
 	private $_SQLPointer;
 	private $_User;
@@ -24,12 +26,13 @@ class Auth extends Controllers{
 		$this->_User = null;
 		$this->_Action = isset($_GET['action']) ? $_GET['action'] : "";
 		$this->_Param = isset($_GET['param']) ? $_GET['param'] : null;
-		$this->_Template = new Template();
+		$this->_Template = new core\Template();
 		
 		# theme loading
 		parent::param("theme.min","css");
 		
 		
+		parent::param("constants.min","js");
 		parent::param("jquery-3.2.1.min","jquery");
 		parent::param("bootstrap.min","jquery");
 		parent::param("sessionStorage.min","js");
@@ -55,14 +58,16 @@ class Auth extends Controllers{
 		$this->_Parse = $this->_Lang->_l();
 		
 		# security
-		if(isset($_GET['controllers']) && $_GET['controllers'] == strtolower(get_class($this))){
+		if(isset($_GET['controllers']) && $_GET['controllers'] == strtolower(substr(get_class($this),strripos(get_class($this),DIRECTORY_SEPARATOR)+1,strlen(get_class($this))))){
 			if(isset($_GET['action']) && $_GET['action'] == "login"){
 				# we do nothing
 			}else{
-				Core::redirect(strtolower(get_class($this)),'login');
+				// var_dump(get_class($this));
+				core\Core::redirect(strtolower(get_class($this)),'login');
 			}
 		}else{
-			Core::redirect(strtolower(get_class($this)),'login');
+			// var_dump(get_class($this));
+			core\Core::redirect(strtolower(get_class($this)),'login');
 		}
 
 		
@@ -73,7 +78,7 @@ class Auth extends Controllers{
 		}
 		
 		if(isset($_POST['bt_c'])){ # le bouton "se connecter" est cliqué youpi
-			Core::redirect('test');
+			core\Core::redirect('test');
 		}
 
 		### TODO : Connexion
@@ -88,7 +93,7 @@ class Auth extends Controllers{
 		unset($_SESSION['PHP_AUTH_USER']);
 		unset($_SESSION['PHP_AUTH_PW']);
 		unset($_SESSION['LANGUAGE']);
-		Core::redirect(strtolower(get_class($this)),'login');
+		// core\Core::redirect(strtolower(get_class($this)),'login');
 	}
 	
 	# mandatory method, which allows to see the content .
